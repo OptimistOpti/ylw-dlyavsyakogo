@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Контрольна робота — Електричне поле</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap');
+
+  :root {
+    --ink: #1a1a2e;
+    --blue: #1a3a6b;
+    --accent: #c8952a;
+    --light: #f5f0e8;
+    --paper: #fdfaf4;
+    --rule: #d4c9b0;
+    --correct: #1a5c2a;
+    --correct-bg: #e8f5ec;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: #e8e0d0;
+    color: var(--ink);
+    padding: 30px 16px;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.18), 0 1px 6px rgba(0,0,0,0.1);
+    border-top: 6px solid var(--blue);
+    padding: 50px 56px 60px;
+    position: relative;
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--accent), transparent 80%);
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--rule);
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--blue);
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+  }
+
+  .header .variant {
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  .level-block {
+    margin-bottom: 36px;
+  }
+
+  .level-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 6px 0 8px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 20px;
+  }
+
+  .question {
+    margin-bottom: 22px;
+  }
+
+  .question-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--blue);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  .options {
+    list-style: none;
+    padding-left: 10px;
+  }
+
+  .options li {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: #555;
+    padding: 2px 0;
+  }
+
+  .options li.correct {
+    color: var(--correct);
+    font-weight: 600;
+    background: var(--correct-bg);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .options li.correct::before {
+    content: '✓ ';
+    font-weight: 700;
+  }
+
+  /* Calculation tasks */
+  .calc-task {
+    margin-bottom: 28px;
+    background: #f9f5ed;
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .calc-task .q {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--blue);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  .given {
+    font-size: 13.5px;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.8;
+  }
+
+  .given span {
+    font-style: italic;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .solution {
+    font-size: 14px;
+    color: #333;
+    line-height: 2;
+  }
+
+  .formula {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    color: var(--blue);
+    font-size: 15px;
+  }
+
+  .answer {
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--correct);
+    background: var(--correct-bg);
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px dashed var(--rule);
+    margin: 10px 0 16px;
+  }
+
+  /* Теоретичне питання */
+  .theory-block {
+    background: #f0eee8;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin-bottom: 28px;
+  }
+
+  .theory-block .q {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--blue);
+    margin-bottom: 12px;
+  }
+
+  .theory-block p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 8px;
+  }
+
+  .theory-block p:last-child { margin-bottom: 0; }
+
+  .theory-block strong {
+    color: var(--ink);
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 44px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule);
+    font-size: 12px;
+    color: #aaa;
+    font-style: italic;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .page { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <h1>Контрольна робота<br>Тема: «Електричне поле»<br>10 клас</h1>
+    <p class="variant">Варіант 1 — Розв'язок</p>
+  </div>
+
+  <!-- ПОЧАТКОВИЙ РІВЕНЬ -->
+  <div class="level-block">
+    <div class="level-title">Початковий рівень (по 1 балу)</div>
+
+    <div class="question">
+      <div class="question-text">1. Яка фізична величина є силовою характеристикою електричного поля?</div>
+      <ul class="options">
+        <li>а) Потенціал</li>
+        <li class="correct">б) Напруженість</li>
+        <li>в) Заряд</li>
+        <li>г) Робота</li>
+      </ul>
+    </div>
+
+    <div class="question">
+      <div class="question-text">2. Одиницею вимірювання напруженості електричного поля є:</div>
+      <ul class="options">
+        <li>а) Кл</li>
+        <li>б) Н</li>
+        <li class="correct">в) Н/Кл</li>
+        <li>г) Вт</li>
+      </ul>
+    </div>
+
+    <div class="question">
+      <div class="question-text">3. Який знак мають однойменні заряди?</div>
+      <ul class="options">
+        <li>а) Притягуються</li>
+        <li class="correct">б) Відштовхуються</li>
+        <li>в) Не взаємодіють</li>
+        <li>г) Зникають</li>
+      </ul>
+    </div>
+
+    <div class="question">
+      <div class="question-text">4. Формула закону Кулона:</div>
+      <ul class="options">
+        <li>а) F = ma</li>
+        <li>б) F = qE</li>
+        <li class="correct">в) F = k(q₁q₂/r²)</li>
+        <li>г) A = qU</li>
+      </ul>
+    </div>
+
+    <div class="question">
+      <div class="question-text">5. Електричне поле існує:</div>
+      <ul class="options">
+        <li>а) лише навколо магнітів</li>
+        <li>б) лише в провідниках</li>
+        <li class="correct">в) навколо електричних зарядів</li>
+        <li>г) тільки у вакуумі</li>
+      </ul>
+    </div>
+
+    <div class="question">
+      <div class="question-text">6. Лінії напруженості електричного поля:</div>
+      <ul class="options">
+        <li>а) перетинаються</li>
+        <li>б) починаються на негативних зарядах</li>
+        <li class="correct">в) показують напрям сили, що діє на позитивний заряд</li>
+        <li>г) не мають напряму</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- СЕРЕДНІЙ РІВЕНЬ -->
+  <div class="level-block">
+    <div class="level-title">Середній рівень (по 2 бали)</div>
+
+    <div class="calc-task">
+      <div class="q">7. Визначити силу взаємодії двох зарядів 2·10⁻⁶ Кл і 4·10⁻⁶ Кл, які знаходяться на відстані 0,3 м у вакуумі.</div>
+      <div class="given">
+        <span>Дано:</span> q₁ = 2·10⁻⁶ Кл, &nbsp; q₂ = 4·10⁻⁶ Кл, &nbsp; r = 0,3 м, &nbsp; k = 9·10⁹ Н·м²/Кл²
+      </div>
+      <hr class="divider">
+      <div class="solution">
+        <span class="formula">F = k · q₁ · q₂ / r²</span><br>
+        F = 9·10⁹ · 2·10⁻⁶ · 4·10⁻⁶ / (0,3)²<br>
+        F = 9·10⁹ · 8·10⁻¹² / 0,09<br>
+        F = 72·10⁻³ / 0,09<br>
+        F = 0,8 Н
+      </div>
+      <div class="answer">Відповідь: F = 0,8 Н</div>
+    </div>
+
+    <div class="calc-task">
+      <div class="q">8. Напруженість електричного поля дорівнює 500 Н/Кл. Яка сила діє на заряд 2·10⁻⁶ Кл?</div>
+      <div class="given">
+        <span>Дано:</span> E = 500 Н/Кл, &nbsp; q = 2·10⁻⁶ Кл
+      </div>
+      <hr class="divider">
+      <div class="solution">
+        <span class="formula">F = q · E</span><br>
+        F = 2·10⁻⁶ · 500 = 10⁻³ Н = 1 мН
+      </div>
+      <div class="answer">Відповідь: F = 1·10⁻³ Н = 1 мН</div>
+    </div>
+
+    <div class="calc-task">
+      <div class="q">9. Визначити напруженість поля, створеного зарядом 5·10⁻⁹ Кл на відстані 0,1 м.</div>
+      <div class="given">
+        <span>Дано:</span> q = 5·10⁻⁹ Кл, &nbsp; r = 0,1 м, &nbsp; k = 9·10⁹ Н·м²/Кл²
+      </div>
+      <hr class="divider">
+      <div class="solution">
+        <span class="formula">E = k · q / r²</span><br>
+        E = 9·10⁹ · 5·10⁻⁹ / (0,1)²<br>
+        E = 45 / 0,01 = 4500 Н/Кл
+      </div>
+      <div class="answer">Відповідь: E = 4500 Н/Кл</div>
+    </div>
+  </div>
+
+  <!-- ДОСТАТНІЙ РІВЕНЬ -->
+  <div class="level-block">
+    <div class="level-title">Достатній рівень (3 бали)</div>
+
+    <div class="calc-task">
+      <div class="q">10. Два точкові заряди 6·10⁻⁶ Кл і −3·10⁻⁶ Кл знаходяться на відстані 20 см. Визначити силу взаємодії між ними та вказати характер взаємодії.</div>
+      <div class="given">
+        <span>Дано:</span> q₁ = 6·10⁻⁶ Кл, &nbsp; q₂ = −3·10⁻⁶ Кл, &nbsp; r = 0,2 м
+      </div>
+      <hr class="divider">
+      <div class="solution">
+        <span class="formula">F = k · |q₁| · |q₂| / r²</span><br>
+        F = 9·10⁹ · 6·10⁻⁶ · 3·10⁻⁶ / (0,2)²<br>
+        F = 9·10⁹ · 18·10⁻¹² / 0,04<br>
+        F = 162·10⁻³ / 0,04 = 4,05 Н
+      </div>
+      <div class="answer">Відповідь: F = 4,05 Н — притягання (заряди різнойменні)</div>
+    </div>
+  </div>
+
+  <!-- ВИСОКИЙ РІВЕНЬ -->
+  <div class="level-block">
+    <div class="level-title">Високий рівень (3 бали)</div>
+
+    <div class="calc-task">
+      <div class="q">11. Електрон влітає в однорідне електричне поле з напруженістю 2000 Н/Кл. Визначити силу, що діє на електрон. Заряд електрона: е = 1,6·10⁻¹⁹ Кл.</div>
+      <div class="given">
+        <span>Дано:</span> E = 2000 Н/Кл, &nbsp; e = 1,6·10⁻¹⁹ Кл
+      </div>
+      <hr class="divider">
+      <div class="solution">
+        <span class="formula">F = e · E</span><br>
+        F = 1,6·10⁻¹⁹ · 2000<br>
+        F = 3,2·10⁻¹⁶ Н
+      </div>
+      <div class="answer">Відповідь: F = 3,2·10⁻¹⁶ Н</div>
+    </div>
+
+    <div class="theory-block">
+      <div class="q">12. Пояснити:</div>
+      <p><strong>Що таке електричне поле?</strong><br>
+      Електричне поле — це особлива форма матерії, яка існує навколо електричних зарядів і за допомогою якої здійснюється взаємодія між зарядженими тілами. Поле не є речовиною — воно невидиме, але реальне: воно діє на будь-який заряд, внесений у нього, з певною силою.</p>
+
+      <p><strong>Чим відрізняється напруженість від потенціалу?</strong><br>
+      <strong>Напруженість (E)</strong> — силова характеристика електричного поля; показує, яка сила діє на одиничний позитивний заряд у даній точці. Це <em>векторна</em> величина (має напрям), вимірюється в Н/Кл.<br>
+      <strong>Потенціал (φ)</strong> — енергетична характеристика; показує потенціальну енергію одиничного заряду в даній точці. Це <em>скалярна</em> величина (не має напряму), вимірюється у Вольтах (В = Дж/Кл).</p>
+
+      <p><strong>Де у побуті використовується дія електричного поля?</strong><br>
+      Електричне поле використовується повсюдно: у конденсаторах (зберігання енергії в блоках живлення), у сенсорних екранах смартфонів (ємнісний ефект), у ксерографії та лазерних принтерах (притягання тонера), у мікрофонах та динаміках, у медичних апаратах (електрокардіограф, дефібрилятор), а також під час зарядки акумуляторів.</p>
+    </div>
+  </div>
+
+  <div class="footer">Контрольна робота з фізики · 10 клас · Тема: Електричне поле</div>
+</div>
+</body>
+</html>
